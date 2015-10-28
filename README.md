@@ -8,12 +8,16 @@ A set of scripts designed to help manage Virtual Machines.
 	Run as root. Cleans offline/non-existing hosts from /ansible/hosts and /etc/ssh/ssh_config 
   
 #configVMNetwork.sh:
-	Updates the network configurations of all owned VM's, (user-specific unlike cleanHosts), required for Guest->Host connections. Run after any manual VM cloning.
+	Updates the network configurations of all owned VM's. User-specific unlike cleanHosts. 
+	
+	Required for Guest->Host connections. Run after any manual VM cloning.
   
   
 #cloneLink.sh:
 	Creates some clones, usage->
+	
 		./cloneLink.sh nameToBeClone name'sSnapshotName newName numberOfVM's	
+		
 	Automatically runs configVMNetwork after completion so no need to do that manually.
   
 #listVM.sh :
