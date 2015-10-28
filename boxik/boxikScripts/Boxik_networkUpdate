@@ -1,0 +1,28 @@
+#!/bin/bash
+
+## This is the hostonlyif, make sure it matches your configurations.
+NETWORK_IF="eth1"
+TIMEOUT=5
+
+## Get data for connection purposes.
+VM_NAME=$(VBoxControl --nologo guestproperty get /MyData/VMname| grep -oP ": \K.*")
+HOST_IP=$(VBoxControl --nologo guestproperty get /MyData/hostIP | grep -oP ": \K.*")
+NC_PORT=$(VBoxControl --nologo guestproperty get /MyData/boxikListenPort| grep -oP ": \K.*")
+VM_IP=$(ifconfig $NETWORK_IF | grep -o "inet addr:[0-9\.]*" | cut -d: -f2)
+
+## While first background works, second will kill it after a set amount of time.
+(	while true;do
+        	nc -v $HOST_IP $NC_PORT <<< "updateIP --name $VM_NAME --ip $VM_IP" 2>/dev/null && exit
+		sleep 0.1
+	done
+)&
+
+pid=$!
+
+## Exit for if kill failed  -> process has ended  -> exited successfully
+(       sleep $TIMEOUT; kill $pid 2>/dev/null || exit ;
+         echo "$0: Netcat connection timeout, double check your ports and the boxListen service" >&2;
+         exit 2;
+)&
+
+wait $pid 2>/dev/null ##So as to ignore the "killed process...." response after killing loop

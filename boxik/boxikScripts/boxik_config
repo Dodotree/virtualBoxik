@@ -1,0 +1,30 @@
+#!/bin/bash
+
+## IP of this computer
+HOST_IP="192.168.1.108"
+
+## Netcat listen/connection port 
+NC_PORT="5555"
+
+## SSH host file (Keep as is, here for reading purposes)
+HOSTFILE="/etc/ssh/ssh_config"
+
+## Ansible hosts location (Whatever file you're using as your main)
+ANS_HOSTS="/etc/ansible/hosts"
+
+## Key for connection between host and guest, currently applies to ALL boxik hosts.
+BOXIK_KEY="$(dirname $0)/secureGuestKey"
+
+## User which it would use for the default login.
+BOXIK_USER="ubuntu"
+
+## Delimiters of Boxik section for the ssh Host and Ansible hosts, make sure you have these in the 2 files.
+## Don't edit anything inside the SSH host as the removal of hosts depends on 4-line host sizes.
+## Changing anything would mean parts wouldn't get deleted or something else might.
+
+START="## BOXIK HOSTS START"
+END="## BOXIK HOSTS END"
+
+ANS_START="\[Boxik\]"
+ANS_END="##BoxikEnd"
+
